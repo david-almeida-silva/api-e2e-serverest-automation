@@ -19,6 +19,9 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Configurar Fuso Horário (BRT - Brasília)
+        run: sudo timedatectl set-timezone America/Sao_Paulo
+
       - name: Instalar dependências (Newman)
         run: |
           npm install -g newman
