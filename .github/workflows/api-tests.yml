@@ -1,0 +1,35 @@
+name: Automação E2E - ServeRest
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências (Newman)
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+
+      - name: Executar testes via Newman
+        run: newman run serverest-collection.json -e serverest-env.json -r htmlextra --reporter-htmlextra-export ./relatorio-api.html
+
+      - name: Salvar Relatório HTML (Artifact)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Relatorio-Testes-API
+          path: ./relatorio-api.html
