@@ -1,0 +1,40 @@
+{
+	"id": "bb4f4c7b-ebf0-454c-a75d-156fe3b934f5",
+	"name": "ServeRest - CI/CD",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "dynamic_email",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "dynamic_product",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "id_produto",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2026-10-09T15:43:58.047Z",
+	"_postman_exported_using": "Postman/12.23.2"
+}

@@ -1,0 +1,170 @@
+{
+  "info": {
+    "_postman_id": "2b94a819-324f-4dcc-9e5e-75128b755806",
+    "name": "ServeRest - Testes E2E API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55995934",
+    "_collection_link": "https://go.postman.co/collection/55995934-2b94a819-324f-4dcc-9e5e-75128b755806?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Usuarios",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.environment.set(\"dynamic_email\", \"qa\" + Date.now() + \"@teste.com\");"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"David Silva QA\",\r\n  \"email\": \"{{dynamic_email}}\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/usuarios",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nlet resposta = pm.response.json();\r\n\r\nlet tokenLimpo = resposta.authorization.replace(\"Bearer \", \"\");\r\n\r\npm.environment.set(\"auth_token\", tokenLimpo);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"{{dynamic_email}}\",\r\n  \"password\": \"teste\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Produto Restrito",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.environment.set(\"dynamic_product\", \"Notebook \" + Date.now());"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201 Created\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\nlet resposta = pm.response.json();\r\npm.environment.set(\"id_produto\", resposta._id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{auth_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"{{dynamic_product}}\",\r\n  \"preco\": 4500,\r\n  \"descricao\": \"Produto automatizado\",\r\n  \"quantidade\": 10\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/produtos",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consultar Produto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Valida integridade do nome do produto\", function () {\r\n    let resposta = pm.response.json();\r\n    // Pega o nome que geramos e salvamos no momento da criação\r\n    let nomeGerado = pm.environment.get(\"dynamic_product\");\r\n    \r\n    // Compara se o nome que voltou da API é igual ao que geramos\r\n    pm.expect(resposta.nome).to.eql(nomeGerado);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/produtos/{{id_produto}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "produtos",
+            "{{id_produto}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
