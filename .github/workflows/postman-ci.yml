@@ -24,7 +24,11 @@ jobs:
         run: npm install -g newman newman-reporter-htmlextra
 
       - name: Executar Testes da API
-        run: newman run serverest-collection.json -e serverest-env.json -r cli -r htmlextra --reporter-htmlextra-export newman/relatorio-api.html
+        run: |
+          newman run serverest-collection.json \
+            -e serverest-env.json \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export newman/relatorio-api.html
 
       - name: Fazer upload do Relatorio HTML Extra
         uses: actions/upload-artifact@v4
