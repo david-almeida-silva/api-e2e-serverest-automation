@@ -1,13 +1,13 @@
 {
-	"id": "bb4f4c7b-ebf0-454c-a75d-156fe3b934f5",
-	"name": "ServeRest - CI/CD",
-	"values": [
-		{
-			"key": "base_url",
-			"value": "",
-			"type": "default",
-			"enabled": true
-		},
+  "id": "bb4f4c7b-ebf0-454c-a75d-156fe3b934f5",
+  "name": "ServeRest - CI/CD",
+  "values": [
+    {
+      "key": "base_url",
+      "value": "https://serverest.dev",
+      "type": "default",
+      "enabled": true
+    },
 		{
 			"key": "dynamic_email",
 			"value": "",
