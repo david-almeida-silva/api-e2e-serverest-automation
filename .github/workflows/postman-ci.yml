@@ -1,0 +1,35 @@
+name: Postman API E2E Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-api:
+    name: Run Postman Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do Codigo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Instalar Newman e HTML Extra Reporter
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Executar Testes da API
+        run: newman run serverest-collection.json -e serverest-env.json -r cli -r htmlextra --reporter-htmlextra-export newman/relatorio-api.html
+
+      - name: Fazer upload do Relatorio HTML Extra
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: postman-api-report
+          path: newman/
+          retention-days: 30
